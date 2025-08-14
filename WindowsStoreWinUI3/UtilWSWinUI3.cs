@@ -25,15 +25,10 @@ namespace AdjustSdk.WindowsStoreWinUI3
 
         private const double PersistValueMaxWaitSeconds = 60;
 
-        public UtilWSWinUI3()
+        public UtilWSWinUI3(DispatcherQueue dispatcherQueue)
         {
-            // WinUI3: Get the dispatcher queue from the current thread
-            _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
-            if (_dispatcherQueue == null)
-            {
-                // Fallback: try to get from main window if available
-                // This may need to be adjusted based on your WinUI3 app structure
-            }
+            // WinUI3: Use the provided dispatcher queue
+            _dispatcherQueue = dispatcherQueue ?? throw new ArgumentNullException(nameof(dispatcherQueue));
 
             _localSettings = ApplicationData.Current.LocalSettings;
             _localFolder = ApplicationData.Current.LocalFolder;

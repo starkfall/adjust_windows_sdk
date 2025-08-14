@@ -51,7 +51,7 @@ namespace AdjustSdk.WindowsStoreWinUI3
             get
             {
                 if (_deviceUtil == null)
-                    _deviceUtil = new UtilWSWinUI3();
+                    throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
                 return _deviceUtil;
             }
             set
@@ -59,6 +59,8 @@ namespace AdjustSdk.WindowsStoreWinUI3
                 _deviceUtil = value;
             }
         }
+
+        private static bool IsInitialized => _deviceUtil != null;
 
         [Obsolete("Static setup of logging is deprecated! Use AdjustConfig constructor instead.")]
         public static void SetupLogging(Action<String> logDelegate, LogLevel? logLevel = null)
@@ -68,12 +70,22 @@ namespace AdjustSdk.WindowsStoreWinUI3
 
         public static bool ApplicationLaunched
         {
-            get { return AdjustInstance.ApplicationLaunched; }
+            get 
+            { 
+                if (!IsInitialized)
+                    throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                    
+                return AdjustInstance.ApplicationLaunched; 
+            }
         }
 
-        public static void ApplicationLaunching(AdjustConfig adjustConfig)
+        public static void ApplicationLaunching(AdjustConfig adjustConfig, Microsoft.UI.Dispatching.DispatcherQueue dispatcherQueue)
         {
             if (ApplicationLaunched) { return; }
+            
+            // Create a new DeviceUtil instance with the provided dispatcher queue
+            DeviceUtil = new UtilWSWinUI3(dispatcherQueue);
+            
             AdjustInstance.ApplicationLaunching(adjustConfig, DeviceUtil);
         }
 
@@ -85,6 +97,9 @@ namespace AdjustSdk.WindowsStoreWinUI3
         /// </summary>
         public static void ApplicationActivated()
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             if (_isApplicationActive) { return; }
 
             _isApplicationActive = true;
@@ -99,6 +114,9 @@ namespace AdjustSdk.WindowsStoreWinUI3
         /// </summary>
         public static void ApplicationDeactivated()
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             if (!_isApplicationActive) { return; }
 
             _isApplicationActive = false;
@@ -113,6 +131,9 @@ namespace AdjustSdk.WindowsStoreWinUI3
         /// </param>
         public static void TrackEvent(AdjustEvent adjustEvent)
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             AdjustInstance.TrackEvent(adjustEvent);
         }
         
@@ -122,6 +143,9 @@ namespace AdjustSdk.WindowsStoreWinUI3
         /// <param name="enabled">The flag to enable or disable the adjust SDK</param>
         public static void SetEnabled(bool enabled)
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             AdjustInstance.SetEnabled(enabled);
         }
 
@@ -131,6 +155,9 @@ namespace AdjustSdk.WindowsStoreWinUI3
         /// <returns>true if the SDK is enabled, false otherwise</returns>
         public static bool IsEnabled()
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             return AdjustInstance.IsEnabled();
         }
 
@@ -140,6 +167,9 @@ namespace AdjustSdk.WindowsStoreWinUI3
         /// <param name="enabled">The flag to enable or disable the adjust SDK</param>
         public static void SetOfflineMode(bool offlineMode)
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             AdjustInstance.SetOfflineMode(offlineMode);
         }
 
@@ -150,6 +180,9 @@ namespace AdjustSdk.WindowsStoreWinUI3
         /// <param name="url">The url that open the application</param>
         public static void AppWillOpenUrl(Uri uri)
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             AdjustInstance.AppWillOpenUrl(uri, DeviceUtil);
         }
 
@@ -158,56 +191,89 @@ namespace AdjustSdk.WindowsStoreWinUI3
         /// </summary>
         public static string GetWindowsAdId()
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             return DeviceUtil.ReadWindowsAdvertisingId();
         }
 
         public static void AddSessionCallbackParameter(string key, string value)
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             AdjustInstance.AddSessionCallbackParameter(key, value);
         }
 
         public static void AddSessionPartnerParameter(string key, string value)
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             AdjustInstance.AddSessionPartnerParameter(key, value);
         }
 
         public static void RemoveSessionCallbackParameter(string key)
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             AdjustInstance.RemoveSessionCallbackParameter(key);
         }
 
         public static void RemoveSessionPartnerParameter(string key)
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             AdjustInstance.RemoveSessionPartnerParameter(key);
         }
 
         public static void ResetSessionCallbackParameters()
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             AdjustInstance.ResetSessionCallbackParameters();
         }
 
         public static void ResetSessionPartnerParameters()
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             AdjustInstance.ResetSessionPartnerParameters();
         }
 
         public static void SendFirstPackages()
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             AdjustInstance.SendFirstPackages();
         }
 
         public static void SetPushToken(string pushToken)
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             AdjustInstance.SetPushToken(pushToken, DeviceUtil);
         }
 
         public static string GetAdid()
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             return AdjustInstance.GetAdid();
         }
 
         public static AdjustAttribution GetAttributon()
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             return AdjustInstance.GetAttribution();
         }
 
@@ -216,6 +282,9 @@ namespace AdjustSdk.WindowsStoreWinUI3
         /// </summary>
         public static void GdprForgetMe()
         {
+            if (!IsInitialized)
+                throw new InvalidOperationException("Adjust SDK not initialized. Call ApplicationLaunching first.");
+                
             AdjustInstance.GdprForgetMe(DeviceUtil);
         }
 
