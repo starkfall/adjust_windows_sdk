@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>AdjustSdk.WindowsStoreWinUI3</id>
+    <version>1.0.0</version>
+    <title>Adjust SDK for Windows Store WinUI3</title>
+    <authors>Adjust</authors>
+    <owners>Adjust</owners>
+    <licenseUrl>https://github.com/adjust/windows_sdk/blob/master/MIT-LICENSE</licenseUrl>
+    <projectUrl>https://github.com/adjust/windows_sdk</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Adjust SDK for Windows Store applications using WinUI3 framework. This package provides mobile measurement and analytics capabilities for Windows applications.</description>
+    <releaseNotes>Initial release of Adjust SDK for Windows Store WinUI3</releaseNotes>
+    <copyright>Copyright 2024</copyright>
+    <tags>adjust analytics tracking windows store winui3 uwp</tags>
+    <dependencies>
+      <group targetFramework="net8.0-windows10.0.18362.0">
+        <dependency id="Microsoft.WindowsAppSDK" version="1.4.231115000" />
+        <dependency id="Microsoft.Windows.SDK.BuildTools" version="10.0.22621.2428" />
+      </group>
+    </dependencies>
+    <frameworkReferences>
+      <group targetFramework="net8.0-windows10.0.18362.0">
+        <frameworkReference name="Microsoft.WindowsDesktop.App" />
+      </group>
+    </frameworkReferences>
+  </metadata>
+  <files>
+    <file src="..\WindowsStoreWinUI3\bin\Release\net8.0-windows10.0.18362.0\**\*" target="lib\net8.0-windows10.0.18362.0" />
+    <file src="..\NetStandard2.1\bin\Release\netstandard2.1\**\*" target="lib\netstandard2.1" />
+  </files>
+</package>
